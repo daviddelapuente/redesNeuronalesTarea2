@@ -26,24 +26,45 @@ class knapsack:
         return self.maxW
 
     def fitness(self):
-        value = sum(self.V)
-        weights = sum(self.W)
+        value = self.getActualValue()
+        weights = self.getActualWeight()
         if weights <= self.maxW:
             return value
         else:
             # si la mochila exede el peso, se castiga.
-            return value - self.autoPunishment(weights, self.maxW)
+            #return self.autoPunishment1(weights,value)
+            return self.autoPunishment2(value)
 
     # funcion de castigo (puede cambiar para experimentar)
     # si una mochila se pasa del peso, se le resta la diferencia a su valor.
-    def autoPunishment(self,w, maxW):
-        return w - maxW
+    def autoPunishment1(self,w,value):
+        return value - w + self.maxW
+
+
+    def autoPunishment2(self,value):
+        return value/2
 
     def summary(self):
         print("V="+str(self.V))
         print("W="+str(self.W))
         print("K=" + str(self.K))
-        print("fitness " + str(self.fitness()))
+        print("fitness: " + str(self.fitness()))
+        print("value: "+str(self.getActualValue()))
+        print("weight: "+str(self.getActualWeight()))
+
+    def getActualValue(self):
+        v=0
+        for i in range(len((self.K))):
+            if self.K[i]==1:
+                v+=self.V[i]
+        return v
+
+    def getActualWeight(self):
+        w=0
+        for i in range(len((self.K))):
+            if self.K[i]==1:
+                w+=self.W[i]
+        return w
 
 def knapCrossOver(k1,k2):
 

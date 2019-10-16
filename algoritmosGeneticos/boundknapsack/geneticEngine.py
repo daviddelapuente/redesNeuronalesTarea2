@@ -89,7 +89,7 @@ V=[4,2,2,1,10]
 maxW=15
 
 
-findKnapSack(V,W,maxW,10,10,3)
+findKnapSack(V,W,maxW,1000,10,3)
 
 
 
