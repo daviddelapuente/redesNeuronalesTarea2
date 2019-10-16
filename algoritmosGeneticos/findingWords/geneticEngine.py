@@ -1,4 +1,5 @@
-
+import matplotlib.pyplot as plt
+import seaborn as sns; sns.set()
 from algoritmosGeneticos.findingWords.wordSuite import *
 
 #posibles abecedarios
@@ -36,8 +37,10 @@ def randIndex(l,n):
     return r
 
 #algoritmo genetico que encuentra una palabra
-def find(word,trys,populationLen,Ncompetitors,abc):
-    print("buscando :"+word)
+
+def find(word,trys,populationLen,mutability,Ncompetitors,abc,headMap=False):
+    if not headMap:
+        print("buscando :"+word)
 
 
     #calculamos el largo de la palabra, para inicializar una poblacion al azar de palabras con ese largo
@@ -45,7 +48,12 @@ def find(word,trys,populationLen,Ncompetitors,abc):
     l = len(word)
     population = initPopulation(populationLen, l,abc)
 
-
+    #para plotear
+    maximos=[]
+    minimos=[]
+    promedios=[]
+    encontradoEn=0
+    b=False
     #como queremos encontrar la mejor palabra, iteramos el numero de trys
     for t in range(trys):
 
@@ -81,7 +89,7 @@ def find(word,trys,populationLen,Ncompetitors,abc):
                     max2=fitness[i]
                     winner2 = competitors[i]
 
-            son = mutateString(crossOverString1(population[winner1], population[winner2]),abc)
+            son = mutateString(crossOverString1(population[winner1], population[winner2]),abc,mutability)
 
             newPopulation.append(son)
 
@@ -93,26 +101,79 @@ def find(word,trys,populationLen,Ncompetitors,abc):
         F=fitnesses(population,word)
 
 
+
         for i in range(len(F)):
             if F[i]>maxfit:
                 maxfit=F[i]
                 best=i
 
             if maxfit==l:
-                print("encontrada!")
-                print("en iteracion "+str(t))
-                return population[i]
+                if not headMap:
+                    print("encontrada!")
+                    print("en iteracion "+str(t))
+                b=True;
+                break;
+
+        #para los graficos
+        encontradoEn+=1
+        maximos.append(maximoDeFitness(F))
+        minimos.append(minimoDeFitness(F))
+        promedios.append(promedioDeFitness(F))
+        if b:
+            break
+
+    if not headMap:
+        print("best is "+str(population[best]))
+        print("with fitness "+str(F[best]))
+
+        print("----------------------------------------")
+        print("ploting")
+        f1 = plt.figure(1)
+        ax1 = f1.add_subplot(111);
+        ax1.set_title("fitnesses")
+        ax1.set_xlabel('epochos')
+        ax1.set_ylabel('fitness')
+        ax1.plot(maximos, c='r')
+        ax1.plot(promedios,c='y')
+        ax1.plot(minimos, c='b')
+        f1.show()
+    return encontradoEn
 
 
 
-    print("best is "+str(population[best]))
-    print("with fitness "+str(F[best]))
+def headMap(word,trys,Ncompetitors,abc):
+    k=0
+    print("creando headMap")
+    poblaciones=[]
+    for i in range(100):
+        poblaciones.append(50+50*i)
 
+    mutabilidad=[]
 
+    for i in range(10):
+        mutabilidad.append(0+i*0.01)
 
-#find("como un angel cruel y sanginario vamos vuela conviertete en leyenda ahora que el viento esta golpeando la puerta de tu corazon",100,1000,10,wordAbc)
+    mapRows=[]
+    for i in range(10):
+        mapCols=[]
+        for j in range(10):
+            print("iteracion: "+str(k))
+            k+=1
+            populationLen=poblaciones[i]
+            mutability=mutabilidad[j]
+            mapCols.append(find(word,trys,populationLen,mutability,Ncompetitors,abc,True))
+        mapRows.append(mapCols)
 
-#find("0100101010100100101001000001110101010001",5,20,11,binAbc)
+    sns.heatmap(mapRows)
+    plt.show()
+
+#headMap("como un angel cruel y sanginario vamos vuela conviertete en leyenda",1000,10,wordAbc)
+
+#headMap("hola po olvidona",100,10,wordAbc)
+
+#find("como un angel cruel y sanginario vamos vuela conviertete en leyenda ahora que el viento esta golpeando la puerta de tu corazon",100,1000,0.5,10,wordAbc)
+
+#find("0100101010100100101001000001110101010001",5,20,0.5,11,binAbc)
 
 
 

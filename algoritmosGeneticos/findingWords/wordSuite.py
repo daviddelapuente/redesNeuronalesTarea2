@@ -1,5 +1,6 @@
 import random
 
+
 #transforma un string en un array
 def stringToArray(string):
     A=[]
@@ -66,14 +67,41 @@ def crossOverString1(s1,s2):
     return arrayToString(crossOverArray(stringToArray(s1),stringToArray(s2)))
 
 #elige un valor al azar del array y lo cambia por un valor al azar del abecedario
-def mutateArray(A,abc):
-    i=random.randint(0, len(A) - 1)
-    j=random.randint(0,len(abc)-1)
-    A[i]=abc[j]
+def mutateArray(A,abc,mutability):
+    mutability*=100
+    r=random.random()
+    if mutability>=r:
+
+        i=random.randint(0, len(A) - 1)
+        j=random.randint(0,len(abc)-1)
+        A[i]=abc[j]
     return A
 
 #elige un valor al azar del string y lo cambia por un valor al azar del abecedario
-def mutateString(s1,abc):
+def mutateString(s1,abc,mutability):
     A=stringToArray(s1)
-    A=mutateArray(A,abc)
+    A=mutateArray(A,abc,mutability)
     return arrayToString(A)
+
+
+#para los graficos
+
+def maximoDeFitness(F):
+    max=F[0]
+    for f in F:
+       if f>=max:
+           max=f
+    return max
+
+def minimoDeFitness(F):
+    min=F[0]
+    for f in F:
+        if f<=min:
+            min=f
+    return min
+
+def promedioDeFitness(F):
+    mean=0
+    for f in F:
+        mean+=f
+    return mean/len(F)
