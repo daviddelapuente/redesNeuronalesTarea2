@@ -1,20 +1,19 @@
 
 from algoritmosGeneticos.findingWords.wordSuite import *
 
+#posibles abecedarios
 wordAbc=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z',' ']
 binAbc=['0','1']
 
 
-
-
-
+#inicia una poblacion de larga populationLen, con individuos de largo l definidos por el abecedario abc
 def initPopulation(populationLen,l,abc):
     population=[]
     for i in range(populationLen):
         population.append(generateRandomString(l,abc))
     return population
 
-
+#calcula el fitnes para un subconjunto de la poblacion
 def fitnessesI(population,word,competitors):
     fitness=[]
     for i in range(len(competitors)):
@@ -22,18 +21,21 @@ def fitnessesI(population,word,competitors):
         fitness.append(f)
     return fitness
 
+#calcula el fitness para la poblacion
 def fitnesses(population,word):
     fitness=[]
     for p in population:
         fitness.append(matchString(word,p))
     return fitness
 
+#devuelve un conjunto al azar de indices entre 0 y l-1
 def randIndex(l,n):
     r=[]
     for i in range(n):
         r.append(random.randint(0, l - 1))
     return r
 
+#algoritmo genetico que encuentra una palabra
 def find(word,trys,populationLen,Ncompetitors,abc):
     print("buscando :"+word)
 
@@ -110,7 +112,7 @@ def find(word,trys,populationLen,Ncompetitors,abc):
 
 #find("como un angel cruel y sanginario vamos vuela conviertete en leyenda ahora que el viento esta golpeando la puerta de tu corazon",100,1000,10,wordAbc)
 
-find("0100101010100100101001000001110101010001",5,20,11,binAbc)
+#find("0100101010100100101001000001110101010001",5,20,11,binAbc)
 
 
 

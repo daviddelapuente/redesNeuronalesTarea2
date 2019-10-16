@@ -68,6 +68,7 @@ def findKnapSack(V,W,maxW,trys,populationLen,Ncompetitors):
                     winner2 = competitors[i]
 
             son = knapCrossOver(winner1,winner2)
+            son.mutate()
             newPopulation.append(son)
 
         population=newPopulation
@@ -83,17 +84,6 @@ def findKnapSack(V,W,maxW,trys,populationLen,Ncompetitors):
 
 
     population[best].summary()
-
-W=[12,2,1,1,4]
-V=[4,2,2,1,10]
-maxW=15
-
-
-findKnapSack(V,W,maxW,1000,10,3)
-
-
-
-
 
 
 
